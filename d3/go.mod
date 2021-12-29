@@ -1,4 +1,4 @@
-module day4
+module day3
 
 go 1.17
 require gee v0.0.0
