@@ -20,9 +20,9 @@ type (
 	}
 
 	Engine struct {
-		*RouterGroup
+		*RouterGroup  // 内嵌结构体 engine作为最顶层分组 拥有RouterGroup所有能力
 		router *router
-		groups []*RouterGroup
+		groups []*RouterGroup  // 存储所有分组
 	}
 )
 
@@ -54,7 +54,7 @@ func (group *RouterGroup) Use(middlewares ...HandlerFunc) {
 
 func (group *RouterGroup) addRoute(method, comp string, handler HandlerFunc) {
 	pattern := group.prefix + comp
-	log.Println("Route %4s - %s", method, pattern)
+	log.Printf("Route %4s - %s", method, pattern)
 	group.engine.router.addRoute(method, pattern, handler)
 }
 

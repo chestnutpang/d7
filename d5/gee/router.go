@@ -46,6 +46,7 @@ func (r *router) addRoute(method string, pattern string, handler HandlerFunc) {
 	r.handlers[key] = handler
 }
 
+
 func (r *router) getRoute(method, path string) (*node, map[string]string) {
 	searchParts := parsePattern(path)
 	params := make(map[string]string)
@@ -54,6 +55,7 @@ func (r *router) getRoute(method, path string) (*node, map[string]string) {
 	if !ok {
 		return nil, nil
 	}
+
 	n := root.search(searchParts, 0)
 
 	if n != nil {
@@ -73,7 +75,6 @@ func (r *router) getRoute(method, path string) (*node, map[string]string) {
 }
 
 
-
 func (r *router) getRoutes(method string) []*node {
 	root, ok := r.roots[method]
 	if !ok {
@@ -83,7 +84,6 @@ func (r *router) getRoutes(method string) []*node {
 	root.travel(&nodes)
 	return nodes
 }
-
 
 func (r *router) handle(c *Context) {
 	n, params := r.getRoute(c.Method, c.Path)
@@ -99,3 +99,4 @@ func (r *router) handle(c *Context) {
 	}
 	c.Next()
 }
+

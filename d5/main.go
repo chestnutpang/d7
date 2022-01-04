@@ -1,6 +1,5 @@
 package main
 
-
 import (
 	"log"
 	"net/http"
@@ -26,6 +25,7 @@ func main() {
 	})
 
 	v2 := r.Group("v2")
+
 	v2.Use(onlyForV2())
 	{
 		v2.GET("/hello/:name", func(c *gee.Context) {
