@@ -4,4 +4,4 @@ go 1.17
 
 require gee v0.0.0
 
-repalce gee => ./gee
+replace gee => ./gee

@@ -2,8 +2,10 @@ package main
 
 
 import (
+	"log"
 	"fmt"
 	"html/template"
+	"net/http"
 	"time"
 	"gee"
 )
@@ -13,7 +15,8 @@ type student struct {
 	Age int8
 }
 
-func FormatAsData(t time.Time) string {
+
+func FormatAsDate(t time.Time) string {
 	year, month, day := t.Date()
 	return fmt.Sprint("%d-%02d-%02d", year, month, day)
 }
@@ -22,10 +25,31 @@ func main() {
 	r := gee.New()
 	r.Use(gee.Logger())
 	r.SetFuncMap(template.FuncMap{
-		"FormatAsData": FormatAsData,
+		"FormatAsDate": FormatAsDate,
 	})
 	r.LoadHTMLGlob("templates/*")
 	r.Static("/assets", "./static")
 
-	stu1 := &student{}
+	stu1 := &student{Name: "Link", Age: 102}
+	stu2 := &student{Name: "Monica", Age: 12}
+
+	r.GET("/", func(c *gee.Context) {
+		c.HTML(http.StatusOK, "css.tmpl", nil)
+	})
+
+	r.GET("/students", func(c *gee.Context) {
+		c.HTML(http.StatusOK, "arr.tmpl", gee.H{
+			"title": "gee",
+			"stuArr": [2]*student{stu1, stu2},
+		})
+	})
+
+	r.GET("/data", func(c *gee.Context) {
+		c.HTML(http.StatusOK, "custom_func.tmpl", gee.H{
+			"title": "gee",
+			"now": time.Date(2022, 1, 1, 0, 0, 0, 0, time.UTC),
+		})
+	})
+	log.Println("server start")
+	r.Run(":9999")
 }
