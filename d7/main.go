@@ -4,6 +4,7 @@ package main
 import (
 	"net/http"
 	"gee"
+	"log"
 )
 
 
@@ -17,6 +18,6 @@ func main() {
 		name := []string{"link"}
 		c.String(http.StatusOK, name[100])
 	})
-
+	log.Println("-----server start-----")
 	r.Run(":9999")
 }
