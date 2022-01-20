@@ -37,6 +37,11 @@ func main() {
 		c.HTML(http.StatusOK, "css.tmpl", nil)
 	})
 
+	r.GET("/panic", func(c *gee.Context) {
+		data := []string{"1", "2"}
+		c.String(http.StatusOK, data[4])
+	})
+
 	r.GET("/students", func(c *gee.Context) {
 		c.HTML(http.StatusOK, "arr.tmpl", gee.H{
 			"title": "gee",
