@@ -2,12 +2,12 @@ package lru
 
 import "container/list"
 
-
+// Cache is a LRU cache. It is not safe for concurrent access.
 type Cache struct {
 	maxBytes int64
 	nbytes   int64
 	ll       *list.List
-	cache    map[string]*list.List
+	cache    map[string]*list.Element
 	OnEvicted func(key string, value Value)
 }
 
@@ -18,11 +18,13 @@ type entry struct {
 }
 
 
+// Value use Len to count how many bytes it takes
 type Value interface {
 	Len() int
 }
 
 
+// New constructor of Cache
 func New(maxBytes int64, onEvicted func(string, Value)) *Cache {
 	return &Cache{
 		maxBytes: maxBytes,
@@ -33,6 +35,7 @@ func New(maxBytes int64, onEvicted func(string, Value)) *Cache {
 }
 
 
+// Add add an element to the cache
 func (c *Cache) Add(key string, value Value) {
 	if ele, ok := c.cache[key]; ok {
 		c.ll.MoveToFront(ele)
@@ -51,6 +54,7 @@ func (c *Cache) Add(key string, value Value) {
 }
 
 
+// Get get a value and update
 func (c *Cache) Get(key string) (value Value, ok bool) {
 	if ele, ok := c.cache[key]; ok {
 		c.ll.MoveToFront(ele)
@@ -61,6 +65,7 @@ func (c *Cache) Get(key string) (value Value, ok bool) {
 }
 
 
+// RemoveOldest remove oldest element
 func (c *Cache) RemoveOldest() {
 	ele := c.ll.Back()
 	if ele != nil {
@@ -75,6 +80,7 @@ func (c *Cache) RemoveOldest() {
 }
 
 
+// Len the number of cache entries
 func (c *Cache) Len() int {
 	return c.ll.Len()
 }
