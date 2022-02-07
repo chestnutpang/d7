@@ -3,7 +3,6 @@ package lru
 
 import "container/list"
 
-
 type Cache struct {
 	maxBytes int64
 	nbytes   int64
@@ -24,7 +23,7 @@ type Value interface {
 }
 
 
-func New(maxBytes int64, onEvicted func(string, Value)) *Cache {
+func New(maxBytes int64, onEvicted func(key string, value Value)) *Cache {
 	return &Cache{
 		maxBytes: maxBytes,
 		ll:       list.New(),
@@ -32,7 +31,6 @@ func New(maxBytes int64, onEvicted func(string, Value)) *Cache {
 		OnEvited: onEvicted,
 	}
 }
-
 
 
 func (c *Cache) Add(key string, value Value) {
@@ -47,7 +45,6 @@ func (c *Cache) Add(key string, value Value) {
 		c.nbytes += int64(len(key)) + int64(value.Len())
 	}
 
-	// 超出最大额度时，删除最旧的元素
 	for c.maxBytes != 0 && c.maxBytes < c.nbytes {
 		c.RemoveOldest()
 	}
@@ -63,7 +60,6 @@ func (c *Cache) Get(key string) (value Value, ok bool) {
 	return
 }
 
-
 func (c *Cache) RemoveOldest() {
 	ele := c.ll.Back()
 	if ele != nil {
@@ -76,7 +72,6 @@ func (c *Cache) RemoveOldest() {
 		}
 	}
 }
-
 
 func (c *Cache) Len() int {
 	return c.ll.Len()

@@ -1,6 +1,5 @@
 package geecache
 
-
 import (
 	"geecache/lru"
 	"sync"
@@ -24,14 +23,13 @@ func (c *cache) add(key string, value ByteView) {
 }
 
 
-func (c *cache) get(key string) (value ByteView, ok bool) {
+func (c *cache) Get(key string) (value ByteView, ok bool) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
 
 	if c.lru == nil {
-		return
+		 return
 	}
-
 	if v, ok := c.lru.Get(key); ok {
 		return v.(ByteView), ok
 	}
