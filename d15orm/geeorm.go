@@ -7,7 +7,7 @@ import (
 )
 
 
-type Engine strucr {
+type Engine struct {
 	db *sql.DB
 }
 

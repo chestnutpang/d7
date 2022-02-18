@@ -41,7 +41,7 @@ func SetLevel(level int) {
 	}
 
 	if ErrorLevel < level {
-		errorLog.SetOutput(ioutil.Disabled)
+		errorLog.SetOutput(ioutil.Discard)
 	}
 
 	if InfoLevel < level {
